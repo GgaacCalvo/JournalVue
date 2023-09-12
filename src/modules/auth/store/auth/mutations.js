@@ -1,21 +1,28 @@
-
 // export const myAction = ( state ) => {
 
 // }
 
-export const addUser = (state, data) => {
-    //state => entries al inicio
-    const {user, idToken, refreshToken} = data
-    console.log(data)
-   /* state = {
-        user,
-        idToken,
-        refreshToken,
-        status: 'authenticated'
-    }*/
-    state.user = user
-    state.idToken = idToken
-    state.refreshToken = refreshToken
-    state.status = 'authenticated'
-   
+export const loginUser = (state, { user, idToken, refreshToken }) => {
+  //state => entries al inicio
+  if (idToken) {
+    localStorage.setItem("idToken", idToken);
+    state.idToken = idToken;
+  }
+  if (refreshToken) {
+    localStorage.setItem("refreshToken", refreshToken);
+    state.refreshToken = refreshToken;
+  }
+  state.user = user;
+  state.status = "authenticated";
+};
+
+export const logout = (state) => {
+
+  state.user = null
+  state.idToken = null
+  state.refreshToken = null
+  state.status = 'not-authenticated'
+
+  localStorage.removeItem('idToken')
+  localStorage.removeItem('refreshToken')
 }

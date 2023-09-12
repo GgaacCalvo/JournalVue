@@ -1,20 +1,33 @@
-const { useStore } = require("vuex")
+import { computed } from "vue";
 
+const { useStore } = require("vuex");
 
-const useAuth = () =>{
+const useAuth = () => {
+  const store = useStore();
 
-    const store = useStore()
+  const createUser = async (user) => {
+    const resp = await store.dispatch("auth/createUser", user);
+    console.log("createUser", resp);
+    return resp;
+  };
 
-    const createUser = async ( user) => {
-       
-        const resp = await store.dispatch('auth/createUser', user)
-        console.log('2', resp)
-        return resp
-        
-    }
-    return{
-        createUser
-    }
-}
+  const loginUser = async (user) => {
+    const resp = await store.dispatch("auth/signInUser", user);
+    console.log("loginuser", resp);
+    return resp;
+  }
 
-export default useAuth
+  const checkAuthStatus = async () => {
+    const resp = await store.dispatch('auth/checkAuthentication')
+    return resp
+  }
+
+  return {
+    createUser,
+    loginUser,
+    checkAuthStatus,
+    authStatus: computed(()=> store.getters['auth/currentState']),
+  };
+};
+
+export default useAuth;
